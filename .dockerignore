@@ -1,0 +1,69 @@
+# ================================================
+# WhistleBlower Vault - Docker Ignore
+# Optimize Docker build context
+# ================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md
+
+# IDE
+.vscode
+.idea
+*.sublime-*
+*.code-workspace
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencies
+node_modules/
+vendor/
+bower_components/
+
+# Laravel
+/storage/*.key
+/storage/logs
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/bootstrap/cache/*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Testing
+.phpunit.result.cache
+coverage/
+.coverage
+*.log
+
+# Build artifacts
+/public/hot
+/public/storage
+/public/build
+/public/mix-manifest.json
+npm-debug.log
+yarn-error.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
