@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Src\Whistleblowing\Presentation\Http\Controllers\WhistleblowerController;
+use Src\Whistleblowing\Presentation\Http\Controllers\KeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::get('/whistleblowing/health', function () {
 
 // Rutas del módulo Whistleblowing
 Route::prefix('whistleblowing')->group(function () {
+    // Endpoint de llave pública para cifrado de reportes
+    Route::get('/keys/public', [KeyController::class, 'getPublicKey']);
+    
+    // Endpoints de reportes
     Route::get('/reports', [WhistleblowerController::class, 'index']);
     Route::post('/reports', [WhistleblowerController::class, 'store']);
     Route::get('/reports/{id}', [WhistleblowerController::class, 'show']);
