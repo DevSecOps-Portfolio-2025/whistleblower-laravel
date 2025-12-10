@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Whistleblowing\Infrastructure\Persistence\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Eloquent Model: ReportModel
@@ -23,6 +26,7 @@ class ReportModel extends Model
         'description',
         'status',
         'reporter_id',
+        'access_code_hash',
     ];
 
     protected $casts = [
@@ -32,4 +36,13 @@ class ReportModel extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
+
+    /**
+     * Relación: Un reporte tiene muchos mensajes
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(MessageModel::class, 'report_id', 'id')
+                    ->orderBy('created_at', 'asc');
+    }
 }

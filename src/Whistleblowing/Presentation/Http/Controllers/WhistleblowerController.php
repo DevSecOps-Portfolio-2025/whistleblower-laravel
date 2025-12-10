@@ -61,6 +61,7 @@ class WhistleblowerController extends Controller
                 'title' => $validated['title'],
                 'description' => $validated['description'],
                 'reporterId' => $validated['reporter_id'] ?? null,
+                'actorIp' => $request->ip(),
             ]);
 
             return response()->json([

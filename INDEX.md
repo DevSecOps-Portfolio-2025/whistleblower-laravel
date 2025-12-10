@@ -9,19 +9,34 @@ Si es tu **primera vez** con este proyecto, lee los documentos en este orden:
    - Qué se hizo y por qué
    - Comandos para iniciar rápidamente
 
-2. **[QUICK_START.md](QUICK_START.md)** 🚀
+2. **[RESUMEN_BIDIRECTIONAL.md](RESUMEN_BIDIRECTIONAL.md)** 🔄 **NUEVO - Comunicación Bidireccional**
+   - Extensión del dominio para mensajería
+   - AccessCode seguro para reportes anónimos
+   - Implementación completa
+
+3. **[IMMUTABLE_AUDIT.md](IMMUTABLE_AUDIT.md)** 🔐 **NUEVO - Auditoría Inmutable**
+   - Sistema de logs encadenados criptográficamente
+   - Detección de manipulaciones (Tamper-Proof)
+   - Cumplimiento normativo (GDPR, SOX, HIPAA)
+
+4. **[QUICK_START.md](QUICK_START.md)** 🚀
    - Comandos PowerShell necesarios
    - Cómo ejecutar el proyecto
    - Pruebas básicas
 
-3. **[DDD_ARCHITECTURE.md](DDD_ARCHITECTURE.md)** 🏛️
+4. **[SETUP_BIDIRECTIONAL.md](SETUP_BIDIRECTIONAL.md)** 🐳 **Docker + Testing**
+   - Guía para ejecutar en Docker
+   - Tests automatizados
+   - Troubleshooting
+
+5. **[DDD_ARCHITECTURE.md](DDD_ARCHITECTURE.md)** 🏛️
    - Documentación completa de la arquitectura
    - Estructura de archivos y carpetas
    - Principios DDD aplicados
    - Endpoints API
    - Próximos pasos
 
-4. **[ARCHITECTURE_DIAGRAM.md](ARCHITECTURE_DIAGRAM.md)** 📊
+6. **[ARCHITECTURE_DIAGRAM.md](ARCHITECTURE_DIAGRAM.md)** 📊
    - Diagramas visuales ASCII
    - Flujo de requests
    - Relaciones entre capas
@@ -34,16 +49,29 @@ Si es tu **primera vez** con este proyecto, lee los documentos en este orden:
 ### Arquitectura y Diseño
 - [DDD_ARCHITECTURE.md](DDD_ARCHITECTURE.md) - Arquitectura completa DDD
 - [ARCHITECTURE_DIAGRAM.md](ARCHITECTURE_DIAGRAM.md) - Diagramas visuales
+- [BIDIRECTIONAL_COMMUNICATION.md](BIDIRECTIONAL_COMMUNICATION.md) - Arquitectura de comunicación bidireccional
 
 ### Guías Prácticas
 - [QUICK_START.md](QUICK_START.md) - Inicio rápido con comandos
-- [RESUMEN_IMPLEMENTACION.md](RESUMEN_IMPLEMENTACION.md) - Resumen ejecutivo
-- [test-ddd-api.ps1](test-ddd-api.ps1) - Script de pruebas automatizado
+- [RESUMEN_IMPLEMENTACION.md](RESUMEN_IMPLEMENTACION.md) - Resumen ejecutivo base
+- [RESUMEN_BIDIRECTIONAL.md](RESUMEN_BIDIRECTIONAL.md) - Resumen comunicación bidireccional
+- [RESUMEN_AUDIT.md](RESUMEN_AUDIT.md) - Resumen ejecutivo auditoría inmutable
+- [IMMUTABLE_AUDIT.md](IMMUTABLE_AUDIT.md) - Auditoría inmutable (Blockchain-like) - Documentación técnica
+- [COMANDOS_AUDIT.md](COMANDOS_AUDIT.md) - Comandos y uso de auditoría inmutable
+- [SETUP_BIDIRECTIONAL.md](SETUP_BIDIRECTIONAL.md) - Setup y testing (Docker incluido)
+- [test-ddd-api.ps1](test-ddd-api.ps1) - Script de pruebas DDD
+- [test-bidirectional.ps1](test-bidirectional.ps1) - Script de pruebas bidireccional (local)
+- [test-bidirectional-docker.ps1](test-bidirectional-docker.ps1) - Script de pruebas bidireccional (Docker)
+- [test-audit-trail.ps1](test-audit-trail.ps1) - Script de pruebas auditoría inmutable
+
+### Docker
+- [DOCKER_README.md](DOCKER_README.md) - Información sobre Docker
+- [DOCKER_QUICK_GUIDE.md](DOCKER_QUICK_GUIDE.md) - Guía rápida Docker + Bidireccional
+- [COMANDOS_BIDIRECTIONAL.md](COMANDOS_BIDIRECTIONAL.md) - Comandos detallados (Docker y local)
 
 ### Contexto del Proyecto
 - [README.md](README.md) - README original de Laravel
 - [SOLUCION_IMPLEMENTADA.md](SOLUCION_IMPLEMENTADA.md) - Contexto anterior del proyecto
-- [DOCKER_README.md](DOCKER_README.md) - Información sobre Docker
 
 ### Configuración
 - [.env.example.ddd](.env.example.ddd) - Configuración de ejemplo
@@ -134,21 +162,36 @@ Lee:
 - [x] Rutas API configuradas con prefijo `api/v1`
 - [x] Domain Layer implementada
   - [x] Report Entity
+  - [x] Message Entity
   - [x] ReportStatus Value Object
+  - [x] AccessCode Value Object
   - [x] ReportRepositoryInterface
 - [x] Application Layer implementada
   - [x] CreateReportUseCase
   - [x] GetReportByIdUseCase
+  - [x] AddMessageToReportUseCase
+  - [x] CheckReportStatusUseCase
 - [x] Infrastructure Layer implementada
   - [x] ReportModel (Eloquent)
+  - [x] MessageModel (Eloquent)
+  - [x] AuditLog (Eloquent)
   - [x] EloquentReportRepository
+  - [x] ImmutableAuditService
 - [x] Presentation Layer implementada
   - [x] WhistleblowerController
   - [x] Rutas API
 - [x] Migración de base de datos creada
 - [x] Dependency Injection configurada
+- [x] **Comunicación Bidireccional (US-004)**
+  - [x] AccessCode hasheado con Argon2id
+  - [x] Sistema de mensajes Report ↔ Investigador
+- [x] **Auditoría Inmutable (US-005)**
+  - [x] Logs encadenados criptográficamente
+  - [x] Comando audit:verify
+  - [x] Domain Events (ReportCreated, MessageCreated)
+  - [x] Anonimización de IP (GDPR)
 - [x] Documentación completa
-- [x] Script de pruebas automatizado
+- [x] Scripts de pruebas automatizados
 
 ### 🔄 Próximos Pasos (Opcionales)
 
@@ -204,14 +247,18 @@ php artisan route:list --path=whistleblowing
 ## 📊 Estadísticas del Proyecto
 
 - **Bounded Contexts:** 1 (Whistleblowing)
-- **Entities:** 1 (Report)
-- **Value Objects:** 1 (ReportStatus)
-- **Use Cases:** 2 (CreateReport, GetReportById)
+- **Entities:** 3 (Report, Message, AuditLog)
+- **Value Objects:** 3 (ReportStatus, AccessCode, MessageAuthor)
+- **Use Cases:** 4 (CreateReport, GetReportById, AddMessage, CheckStatus)
 - **Repositories:** 1 (ReportRepository)
-- **Controllers:** 1 (WhistleblowerController)
-- **API Endpoints:** 6
-- **Migrations:** 1
-- **Archivos de Documentación:** 7
+- **Services:** 2 (EncryptionService, ImmutableAuditService)
+- **Controllers:** 2 (WhistleblowerController, KeyController)
+- **API Endpoints:** 8+
+- **Migrations:** 3 (reports, messages, audit_logs)
+- **Domain Events:** 2 (ReportCreated, MessageCreated)
+- **Listeners:** 1 (AuditLogListener)
+- **Console Commands:** 1 (audit:verify)
+- **Archivos de Documentación:** 10+
 
 ---
 

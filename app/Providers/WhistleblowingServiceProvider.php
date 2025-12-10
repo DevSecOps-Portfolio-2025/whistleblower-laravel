@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Src\Whistleblowing\Domain\Events\MessageCreated;
+use Src\Whistleblowing\Domain\Events\ReportCreated;
+use Src\Whistleblowing\Infrastructure\Listeners\AuditLogListener;
 
 class WhistleblowingServiceProvider extends ServiceProvider
 {
@@ -25,6 +29,11 @@ class WhistleblowingServiceProvider extends ServiceProvider
                 return new \Src\Whistleblowing\Infrastructure\Persistence\Eloquent\ReportModel();
             }
         );
+
+        // Registrar el servicio de auditoría inmutable
+        $this->app->singleton(
+            \Src\Whistleblowing\Infrastructure\Services\ImmutableAuditService::class
+        );
     }
 
     /**
@@ -34,6 +43,25 @@ class WhistleblowingServiceProvider extends ServiceProvider
     {
         // Registrar las rutas del módulo Whistleblowing
         $this->registerRoutes();
+
+        // Registrar los event listeners para auditoría
+        $this->registerEventListeners();
+    }
+
+    /**
+     * Registrar los event listeners
+     */
+    protected function registerEventListeners(): void
+    {
+        Event::listen(
+            ReportCreated::class,
+            [AuditLogListener::class, 'handleReportCreated']
+        );
+
+        Event::listen(
+            MessageCreated::class,
+            [AuditLogListener::class, 'handleMessageCreated']
+        );
     }
 
     /**

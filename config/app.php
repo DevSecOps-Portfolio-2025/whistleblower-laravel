@@ -107,6 +107,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Audit Chain Salt
+    |--------------------------------------------------------------------------
+    |
+    | This secret salt is used to calculate the cryptographic hash chain for
+    | the immutable audit log. It should be a random string and kept secret.
+    | Change this value will invalidate all existing audit log entries.
+    |
+    */
+
+    'audit_salt' => env('APP_AUDIT_SALT', ''),
+
+    /*
+    |--------------------------------------------------------------------------
     | Maintenance Mode Driver
     |--------------------------------------------------------------------------
     |

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\Whistleblowing\Domain\Repositories;
 
 use Src\Whistleblowing\Domain\Entities\Report;
+use Src\Whistleblowing\Domain\ValueObjects\AccessCode;
 
 /**
  * Repository Interface: ReportRepositoryInterface
@@ -21,6 +24,11 @@ interface ReportRepositoryInterface
      * Encontrar un reporte por ID
      */
     public function findById(string $id): ?Report;
+
+    /**
+     * Encontrar un reporte por su AccessCode
+     */
+    public function findByAccessCode(AccessCode $code): ?Report;
 
     /**
      * Obtener todos los reportes
