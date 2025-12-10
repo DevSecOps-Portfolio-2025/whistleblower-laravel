@@ -117,4 +117,63 @@ class RsaKeyService
     {
         return $this->publicKeyPath;
     }
+
+    /**
+     * Desencripta datos usando la llave privada RSA
+     * 
+     * @param string $encryptedData Datos encriptados en Base64
+     * @return string|null Texto plano desencriptado, o null si falla
+     * @throws RuntimeException Si la llave privada no existe o es inválida
+     */
+    public function decrypt(string $encryptedData): ?string
+    {
+        // Verificar que la llave privada existe
+        if (!file_exists($this->privateKeyPath)) {
+            throw new RuntimeException(
+                "La llave privada no existe. Ejecute: php artisan whistleblowing:generate-keys"
+            );
+        }
+
+        // Leer la llave privada
+        $privateKey = file_get_contents($this->privateKeyPath);
+        if ($privateKey === false) {
+            throw new RuntimeException("Error al leer la llave privada desde: {$this->privateKeyPath}");
+        }
+
+        // Obtener el recurso de la llave privada
+        $privateKeyResource = openssl_pkey_get_private($privateKey);
+        if ($privateKeyResource === false) {
+            throw new RuntimeException("Error al cargar la llave privada: " . openssl_error_string());
+        }
+
+        try {
+            // Decodificar el Base64
+            $encryptedBinary = base64_decode($encryptedData, true);
+            if ($encryptedBinary === false) {
+                return null; // Datos inválidos en Base64
+            }
+
+            // Desencriptar usando la llave privada con padding OAEP
+            $decrypted = '';
+            $success = openssl_private_decrypt(
+                $encryptedBinary,
+                $decrypted,
+                $privateKeyResource,
+                OPENSSL_PKCS1_OAEP_PADDING
+            );
+
+            if (!$success) {
+                // Log del error para debugging (sin exponer datos sensibles)
+                error_log("Error al desencriptar: " . openssl_error_string());
+                return null;
+            }
+
+            return $decrypted;
+        } finally {
+            // Liberar el recurso de la llave
+            if ($privateKeyResource !== false) {
+                openssl_free_key($privateKeyResource);
+            }
+        }
+    }
 }
